@@ -1,0 +1,726 @@
+  <CheatEntries>
+    <CheatEntry>
+      <ID>54</ID>
+      <Description>"Auto Attach"</Description>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+beep()
+-- Auto Attach
+--------------------------------------------------------------------------------
+-- func: Trainer_Example.Main( .. )
+-- desc: Prepares script for overall actions.
+--------------------------------------------------------------------------------
+-- form
+local Trainer_Example = { }
+-- process
+local process_name = "game.exe";
+function Trainer_Example.Main( )
+   -- Other
+   Trainer_Example.process_checker = InitTimer( Trainer_Example.main_panel, 5000, false, process_checker )
+   return true;
+end
+-- CUSTOM FUNCTIONS
+function InitTimer( owner, tickRate, status, func )
+   timer = createTimer( owner )
+   if( timer == nil ) then
+        return nil;
+   end
+   timer_setInterval( timer, tickRate )
+   timer_onTimer( timer, func )
+   timer_setEnabled( timer, status )
+   return timer;
+end
+-- TIMERS
+function process_checker(t)
+   status = readInteger( process_name )
+   if status == nil then
+      openProcess(process_name)
+   else
+   end
+end
+-- EVENTS
+function onOpenProcess()
+end
+
+function closeCleanup(sender)
+   closeCE()
+   return caFree
+end
+-- Execute
+Trainer_Example.Main();
+timer_setEnabled( Trainer_Example.process_checker, true ) -- timer...
+-- End Of Auto Attach
+function CEMemo1Click(sender)
+end
+{$asm}
+[DISABLE]
+{$lua}
+beep()
+timer.Destroy()
+{$asm}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>55</ID>
+      <Description>"lua-hotkey-test"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+{$lua}
+--beep()
+speak("hotkeys activated")
+
+addylist = getAddressList()
+HP = addylist.getMemoryRecordByDescription('HP')
+
+function pushValue(sender)
+beep()
+HP.Value=75000
+HP.Active=true
+HP.AllowIncrease=true
+end
+
+function killValue(sender)
+beep()
+--getAddressList().getMemoryRecordByDescription("HP").Value=100
+getAddressList().getMemoryRecordByDescription("HP").Active=FALSE
+end
+
+HPon = createHotkey(pushValue, VK_F5)
+HPoff = createHotkey(killValue, VK_F6)
+{$asm}
+
+[DISABLE]
+{$lua}
+--beep()
+speak("hotkeys deactivated")
+HPon.Destroy()
+HPoff.Destroy()
+{$asm}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>56</ID>
+      <Description>"d3dmenu+hotkeys"</Description>
+      <LastState/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[ENABLE]
+//code from here to '[DISABLE]' will be used to enable the cheat
+{$lua}
+beep()
+--create a background image (in this case, just a simple 1 pixel color stretched)
+background=createPicture()
+bmp=picture_getBitmap(background);
+
+graphic_setHeight(bmp,1)
+graphic_setWidth(bmp,1)
+c=rasterimage_getCanvas(bmp)
+
+--canvas_setPixel(c,0,0,0xff0000)
+canvas_setPixel(c,0,0,0xff0000)
+
+highlighter=createPicture()
+bmp=picture_getBitmap(highlighter);
+
+graphic_setHeight(bmp,1)
+graphic_setWidth(bmp,1)
+c=rasterimage_getCanvas(bmp)
+
+canvas_setPixel(c,0,0,0x0000ff)
+
+
+
+d3dhook_initializeHook()
+bgtexture=d3dhook_createTexture(background)
+
+bgsprite=d3dhook_createSprite(bgtexture);
+--d3dhook_renderobject_setX(bgsprite, -1) --center it horizontally
+d3dhook_renderobject_setX(bgsprite, -1)
+d3dhook_renderobject_setY(bgsprite, 0)
+d3dhook_sprite_setWidth(bgsprite,200)
+d3dhook_sprite_setHeight(bgsprite,250)
+
+highlightertexture=d3dhook_createTexture(highlighter)
+hlsprite=d3dhook_createSprite(highlightertexture)
+d3dhook_renderobject_setVisible(hlsprite, false) --don't show it just yet
+--d3dhook_renderobject_setX(hlsprite, -1) --center (so matches with the background)
+d3dhook_renderobject_setX(hlsprite, -1)
+d3dhook_renderobject_setY(hlsprite, -1)
+d3dhook_sprite_setWidth(hlsprite,200)
+
+
+
+font=createFont()
+setProperty(font,'Color',0xFFFF00)
+--setProperty(font,'Quality','fqNonAntialiased')
+--font.Quality = 'fqNonAntialiased'
+--font.Size = 8
+fontmap=d3dhook_createFontmap(font)
+
+lineheight=d3dhook_texture_getHeight(fontmap) --fontmap inherits from texture so this can be used
+
+d3dhook_sprite_setHeight(hlsprite,lineheight) --make the highlightr the same height as a textline
+
+Text1=d3dhook_createTextContainer(fontmap,-1,25,'=-o-=TITLE=-o-=')
+Option1=d3dhook_createTextContainer(fontmap,-1,25+lineheight*1,'GOD: OFF')
+Option2=d3dhook_createTextContainer(fontmap,-1,25+lineheight*2,'MAGE: OFF')
+Option3=d3dhook_createTextContainer(fontmap,-1,25+lineheight*3,'SACK: OFF')
+Option4=d3dhook_createTextContainer(fontmap,-1,25+lineheight*4,'-LEVEL-')
+Option5=d3dhook_createTextContainer(fontmap,-1,25+lineheight*5,'-STRENGTH-')
+Option6=d3dhook_createTextContainer(fontmap,-1,25+lineheight*6,'-DEXTERITY-')
+Option7=d3dhook_createTextContainer(fontmap,-1,25+lineheight*7,'-INTELLIGENCE-')
+Option8=d3dhook_createTextContainer(fontmap,-1,25+lineheight*8,'-ARMOR-')
+Option9=d3dhook_createTextContainer(fontmap,-1,25+lineheight*9,'-MONEY-')
+Option10=d3dhook_createTextContainer(fontmap,-1,25+lineheight*10,'-XP-')
+Option11=d3dhook_createTextContainer(fontmap,-1,25+lineheight*11,'-POINTS-')
+Text2=d3dhook_createTextContainer(fontmap,-1,25+lineheight*12,'=-o-=BY TOKI=-o-=')
+Option1State=false
+Option2State=false
+Option3State=false
+
+
+selectedOption=1
+
+function setHighlighterToSelectedOption()
+  d3dhook_renderobject_setY(hlsprite, 40+lineheight*(selectedOption-1))
+end
+
+setHighlighterToSelectedOption()
+d3dhook_renderobject_setVisible(hlsprite, true)
+
+
+
+hidden = 0
+
+function toggleMenu()
+  if hidden == 0 then
+    bgsprite.Visible = false
+    hlsprite.Visible = false
+    Text1.Visible = false
+    Option1.Visible = false
+    Option2.Visible = false
+    Option3.Visible = false
+    Option4.Visible = false
+    Option5.Visible = false
+    Option6.Visible = false
+    Option7.Visible = false
+    Option8.Visible = false
+    Option9.Visible = false
+    Option10.Visible = false
+    Option11.Visible = false
+    Text2.Visible = false
+    hidden = 1
+  else
+    bgsprite.Visible = true
+    hlsprite.Visible = true
+    Text1.Visible = true
+    Option1.Visible = true
+    Option2.Visible = true
+    Option3.Visible = true
+    Option4.Visible = true
+    Option5.Visible = true
+    Option6.Visible = true
+    Option7.Visible = true
+    Option8.Visible = true
+    Option9.Visible = true
+    Option10.Visible = true
+    Option11.Visible = true
+    Text2.Visible = true
+    hidden = 0
+  end
+end
+--[[
+function killMenu()
+  bgsprite.Destroy()
+  hlsprite.Destroy()
+  Text1.Destroy()
+  Option1.Destroy()
+  Option2.Destroy()
+  Option3.Destroy()
+end
+]]--
+
+addylist = getAddressList()
+godEntry = addylist.getMemoryRecordByDescription('HP')
+godPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+FC'
+mageEntry = addylist.getMemoryRecordByDescription('MP')
+magePointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+108'
+sackEntry = addylist.getMemoryRecordByDescription('Sack Cooldown')
+sackPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+A4]+9C]+294'
+lvlEntry = addylist.getMemoryRecordByDescription('Level')
+lvlPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+F0'
+strEntry = addylist.getMemoryRecordByDescription('Strength')
+strPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+90'
+dexEntry = addylist.getMemoryRecordByDescription('Dexterity')
+dexPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+94'
+intEntry = addylist.getMemoryRecordByDescription('Intelligence')
+intPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+98'
+armorEntry = addylist.getMemoryRecordByDescription('Armor')
+armorPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+AC'
+moneyEntry = addylist.getMemoryRecordByDescription('Money')
+moneyPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+10C'
+xpEntry = addylist.getMemoryRecordByDescription('XP')
+xpPointer = '[[[[["mono.dll"+001F30AC]+20]+E8]+8C]+354]+F4'
+pointsEntry = addylist.getMemoryRecordByDescription('Points To Spend')
+pointsPointer = '[[[[["mono.dll"+001F30AC]+C0]+C]+28]+144]+2E4'
+
+function ExecuteSelectedOption()
+  beep()
+  local onoff="OFF";
+
+  if (selectedOption==1) then
+    Option1State=not Option1State
+    if (Option1State) then
+      onoff="ON"
+      godEntry.Active=true
+      godEntry.AllowIncrease=true
+      --godEntry.Value=75000
+--[[
+      godValue = readFloat(godPointer)
+      writeFloat(godPointer,godValue+500)
+]]--
+      --writeFloat(godPointer,readFloat(godPointer)+75000)
+      writeFloat(godPointer,75000)
+    else
+      onoff="OFF"
+      godEntry.Active=false
+    end
+    d3dhook_textcontainer_setText(Option1,'GOD: '..onoff);
+  end
+
+  if (selectedOption==2) then
+    Option2State=not Option2State
+    if (Option2State) then
+      onoff="ON"
+      mageEntry.Active=true
+      mageEntry.AllowIncrease=true
+      --mageEntry.Value=75000
+      writeFloat(magePointer,75000)
+    else
+      onoff="OFF"
+      mageEntry.Active=false
+    end
+    d3dhook_textcontainer_setText(Option2,'MAGE: '..onoff);
+  end
+
+  if (selectedOption==3) then
+    Option3State=not Option3State
+    if (Option3State) then
+      onoff="ON"
+      sackEntry.Active=true
+      sackEntry.AllowDecrease=true
+      writeFloat(sackPointer,0)
+      --sackEntry.Value=0
+    else
+      onoff="OFF"
+      sackEntry.Active=false
+    end
+    d3dhook_textcontainer_setText(Option3,'SACK: '..onoff);
+  end
+
+  if (selectedOption==4) then
+    lvlInput = inputQuery('LEVEL','SET VALUE','')
+    writeInteger(lvlPointer,lvlInput)
+  end
+
+  if (selectedOption==5) then
+    strInput = inputQuery('STRENGTH','SET VALUE','')
+    writeInteger(strPointer,strInput)
+  end
+
+  if (selectedOption==6) then
+    dexInput = inputQuery('DEXTERITY','SET VALUE','')
+    writeInteger(dexPointer,dexInput)
+  end
+
+  if (selectedOption==7) then
+    intInput = inputQuery('INTELLIGENCE','SET VALUE','')
+    writeInteger(intPointer,intInput)
+  end
+
+  if (selectedOption==8) then
+    armorInput = inputQuery('ARMOR','SET VALUE','')
+    writeInteger(armorPointer,armorInput)
+  end
+
+  if (selectedOption==9) then
+    moneyInput = inputQuery('MONEY','SET VALUE','')
+    writeInteger(moneyPointer,moneyInput)
+  end
+
+  if (selectedOption==10) then
+    xpInput = inputQuery('XP','SET VALUE','')
+    writeInteger(xpPointer,xpInput)
+  end
+
+  if (selectedOption==11) then
+    pointsInput = inputQuery('POINTS TO SPEND','SET VALUE','')
+    writeInteger(pointsPointer,pointsInput)
+  end
+
+end
+
+
+
+function objectclick(object, x, y)
+  --bla=userDataToInteger(object)
+  --print(string.format("click on %x",bla))
+
+  if hidden == 1 then
+    return
+  end
+
+  if (object==Option1) then
+    selectedOption=1
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option2) then
+    selectedOption=2
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option3) then
+    selectedOption=3
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option4) then
+    selectedOption=4
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option5) then
+    selectedOption=5
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option6) then
+    selectedOption=6
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option7) then
+    selectedOption=7
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option8) then
+    selectedOption=8
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option9) then
+    selectedOption=9
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option10) then
+    selectedOption=10
+    ExecuteSelectedOption()
+  end
+
+  if (object==Option11) then
+    selectedOption=11
+    ExecuteSelectedOption()
+  end
+
+  setHighlighterToSelectedOption()
+end
+
+
+
+d3dhook_onClick(objectclick)
+
+function keydown(virtualkey,char)
+  if (virtualkey==VK_DOWN) then
+    if hidden == 1 then
+      --speak("menu disabled")
+      return
+    end
+    --down arrow
+    if (selectedOption&lt;11) then
+      selectedOption=selectedOption+1
+    end
+  end
+
+  if (virtualkey==VK_UP) then
+    if hidden == 1 then
+      return
+    end
+    --up arrow
+    if (selectedOption&gt;1) then
+      selectedOption=selectedOption-1
+    end
+  end
+
+  if (virtualkey==VK_RETURN) then
+    if hidden == 1 then
+      return
+    end
+    ExecuteSelectedOption()
+  end
+
+  if (virtualkey==VK_INSERT) then
+    --beep()
+    toggleMenu()
+  end
+--[[
+  if (virtualkey==VK_DELETE) then
+    killMenu()
+  end
+]]--
+  setHighlighterToSelectedOption()
+
+  return true
+end
+
+d3dhook_onKey(keydown)
+
+
+
+{$asm}
+[DISABLE]
+//code from here till the end of the code will be used to disable the cheat
+{$lua}
+beep()
+function endMenu()
+  background.Destroy()
+  highlighter.Destroy()
+  bgtexture.Destroy()
+  highlightertexture.Destroy()
+  font.Destroy()
+  fontmap.Destroy()
+  bgsprite.Destroy()
+  hlsprite.Destroy()
+
+  Text1.Destroy()
+  Option1.Destroy()
+  Option2.Destroy()
+  Option3.Destroy()
+  Option4.Destroy()
+  Option5.Destroy()
+  Option6.Destroy()
+  Option7.Destroy()
+  Option8.Destroy()
+  Option9.Destroy()
+  Option10.Destroy()
+  Option11.Destroy()
+  Text2.Destroy()
+end
+
+function endCheats()
+  godEntry.Active=false
+  mageEntry.Active=false
+  sackEntry.Active=false
+end
+
+function keydown(virtualkey,char)
+--disallow keypress backgrounded functions activity
+end
+
+endMenu()
+endCheats()
+d3dhook_onKey(keydown)
+{$asm}
+</AssemblerScript>
+    </CheatEntry>
+    <CheatEntry>
+      <ID>52</ID>
+      <Description>"[TABLE]"</Description>
+      <Options moHideChildren="1"/>
+      <LastState Activated="1"/>
+      <VariableType>Auto Assembler Script</VariableType>
+      <AssemblerScript>[Enable]
+{$lua}
+beep()
+PRIVATETABLE, SWITCHSUPPORT = true, false
+
+function cycleTableViewMode(sender,force)
+  local state = not(tableMenuItem.Caption == 'Table Mode')
+  if force~=nil then state = not force end
+  tableMenuItem.Caption = state and 'Table Mode' or 'Normal Mode'
+  getMainForm().Splitter1.Visible = state
+  getMainForm().Panel4.Visible    = state
+  getMainForm().Panel5.Visible    = state
+end
+
+function appendTableMenu()
+  if tableMenuExist then return end
+  local parent = getMainForm().Menu.Items
+  tableMenuItem = createMenuItem(parent)
+  parent.add(tableMenuItem)
+  tableMenuItem.Caption = 'Table Mode'
+  tableMenuItem.OnClick = cycleTableViewMode
+  tableMenuExist = 'yes'
+end
+appendTableMenu()
+cycleTableViewMode(nil, true)
+{$asm}
+
+[Disable]
+{$lua}
+beep()
+cycleTableViewMode(nil, false)
+{$asm}
+</AssemblerScript>
+      <CheatEntries>
+        <CheatEntry>
+          <ID>32</ID>
+          <Description>"Level"</Description>
+          <LastState Value="2" RealAddress="5E049C18"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>F0</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>0</ID>
+          <Description>"HP"</Description>
+          <LastState Value="31.52500916" RealAddress="5E049C24"/>
+          <VariableType>Float</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>FC</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>1</ID>
+          <Description>"MP"</Description>
+          <LastState Value="96.10199738" RealAddress="5E049C30"/>
+          <VariableType>Float</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>108</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>84</ID>
+          <Description>"Strength"</Description>
+          <LastState Value="6" RealAddress="5E049BB8"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>90</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>79</ID>
+          <Description>"Dexterity"</Description>
+          <LastState Value="1" RealAddress="5E049BBC"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>94</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>82</ID>
+          <Description>"Intelligence"</Description>
+          <LastState Value="1" RealAddress="5E049BC0"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>98</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>18</ID>
+          <Description>"Armor"</Description>
+          <LastState Value="3" RealAddress="5E049BD4"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>AC</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>3</ID>
+          <Description>"Money"</Description>
+          <LastState Value="5001" RealAddress="5E049C34"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>10C</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>8</ID>
+          <Description>"XP"</Description>
+          <LastState Value="96" RealAddress="5E049C1C"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>F4</Offset>
+            <Offset>354</Offset>
+            <Offset>8C</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>57</ID>
+          <Description>"Sack Cooldown"</Description>
+          <LastState Value="0" RealAddress="5E034C24"/>
+          <VariableType>Float</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>294</Offset>
+            <Offset>9C</Offset>
+            <Offset>A4</Offset>
+            <Offset>E8</Offset>
+            <Offset>20</Offset>
+          </Offsets>
+        </CheatEntry>
+        <CheatEntry>
+          <ID>53</ID>
+          <Description>"Points To Spend"</Description>
+          <LastState Value="8" RealAddress="12D999EC"/>
+          <VariableType>4 Bytes</VariableType>
+          <Address>"mono.dll"+001F30AC</Address>
+          <Offsets>
+            <Offset>2E4</Offset>
+            <Offset>144</Offset>
+            <Offset>28</Offset>
+            <Offset>C</Offset>
+            <Offset>C0</Offset>
+          </Offsets>
+        </CheatEntry>
+      </CheatEntries>
+    </CheatEntry>
+  </CheatEntries>
